@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
+from flask_jwt_extended import create_access_token
 import login
 
 db = SQLAlchemy()
@@ -19,6 +20,7 @@ db = SQLAlchemy()
 #             "email": self.email,
 #             # do not serialize the password, its a security breach
 #         }
+
 
 class Employee(db.Model):
     __tablename__ = 'employees'
@@ -41,17 +43,15 @@ class Employee(db.Model):
     def verify_password(self, password):
         return check_password_hash(self.password_hash, password)
 
-    def is_authenticated(self):
-        return True
-
-    def is_active(self):
-        return True
-
-    def is_anonymous(self):
-        return False
+    def generate_jwt(self):
+        access_token = create_access_token(identity=self.employee_id)
+        return access_token
 
     def get_id(self):
-        return str(self.id)
+        try:
+            return text_type(self.id)
+        except AttributeError:
+            raise NotImplementedError('No `id` attribute - override `get_id`')
 
 class Shift(db.Model):
     __tablename__ = 'shifts'
