@@ -7,6 +7,7 @@ import {
   Grid,
   Container,
 } from "@material-ui/core";
+import "../../styles/loginpage.css";
 
 const LoginPage = () => {
   return (

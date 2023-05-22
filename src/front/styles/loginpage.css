@@ -1,0 +1,7 @@
+/* In your .css file */
+container {
+  background-image: url("../img/aa-plane.jpeg");
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
