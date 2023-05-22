@@ -28,24 +28,24 @@ class Shift(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     shift_time = db.Column(db.String(64), unique=True)
-    employees = db.relationship('Employee', backref='assigned_shift', lazy='dynamic')
+    users = db.relationship('User', backref='assigned_shift', lazy='dynamic')
 
 class Preference(db.Model):
     __tablename__ = 'preferences'
 
     id = db.Column(db.Integer, primary_key=True)
     shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'))
-    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     rank = db.Column(db.Integer)
 
-class Employee(db.Model):
-    __tablename__ = 'employees'
+class User(db.Model):
+    __tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.String(64), unique=True, index=True)
+    user_id = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     hire_date = db.Column(db.DateTime)
-    preferences = db.relationship('Preference', backref='employee', lazy='dynamic')
+    preferences = db.relationship('Preference', backref='user', lazy='dynamic')
     assigned_shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'))
 
     @property
@@ -60,5 +60,5 @@ class Employee(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def generate_jwt(self):
-        access_token = create_access_token(identity=self.employee_id)
+        access_token = create_access_token(identity=self.user_id)
         return access_token
