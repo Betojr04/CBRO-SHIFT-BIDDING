@@ -1,7 +1,8 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_jwt_extended import create_access_token
-import login
+import datetime
+
 
 db = SQLAlchemy()
 
@@ -21,6 +22,21 @@ db = SQLAlchemy()
 #             # do not serialize the password, its a security breach
 #         }
 
+
+class Shift(db.Model):
+    __tablename__ = 'shifts'
+
+    id = db.Column(db.Integer, primary_key=True)
+    shift_time = db.Column(db.String(64), unique=True)
+    employees = db.relationship('Employee', backref='assigned_shift', lazy='dynamic')
+
+class Preference(db.Model):
+    __tablename__ = 'preferences'
+
+    id = db.Column(db.Integer, primary_key=True)
+    shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'))
+    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'))
+    rank = db.Column(db.Integer)
 
 class Employee(db.Model):
     __tablename__ = 'employees'
@@ -46,28 +62,3 @@ class Employee(db.Model):
     def generate_jwt(self):
         access_token = create_access_token(identity=self.employee_id)
         return access_token
-
-    def get_id(self):
-        try:
-            return text_type(self.id)
-        except AttributeError:
-            raise NotImplementedError('No `id` attribute - override `get_id`')
-
-class Shift(db.Model):
-    __tablename__ = 'shifts'
-
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(64), unique=True)
-    employees = db.relationship('Employee', backref='shift', lazy='dynamic')
-
-class Preference(db.Model):
-    __tablename__ = 'preferences'
-
-    id = db.Column(db.Integer, primary_key=True)
-    shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'))
-    employee_id = db.Column(db.Integer, db.ForeignKey('employees.id'))
-    rank = db.Column(db.Integer)
-
-@login_manager.user_loader
-def load_user(user_id):
-    return Employee.query.get(int(user_id))
