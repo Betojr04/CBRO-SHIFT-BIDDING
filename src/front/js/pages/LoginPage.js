@@ -16,7 +16,7 @@ const LoginPage = () => {
         <Grid container spacing={3} direction="column" alignItems="center">
           <Grid item xs={12}>
             <Typography variant="h2" gutterBottom>
-              Log in to submit your shift bid.
+              Make sure to submit your shift bid before May 12th at 8am.
             </Typography>
           </Grid>
           <Grid item xs={12} sm={8} md={6}>
