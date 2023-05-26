@@ -1,7 +1,17 @@
 import React from "react";
-import { Box, Typography, List, ListItem, Divider } from "@material-ui/core";
+import {
+  Box,
+  Typography,
+  List,
+  ListItem,
+  Divider,
+  Button,
+} from "@material-ui/core";
 
 export const HelpPage = () => {
+  const handleEmailClick = () => {
+    window.location.href = "mailto:scheduling-department@example.com";
+  };
   return (
     <Box p={3}>
       <Typography variant="h2" gutterBottom>
@@ -59,6 +69,18 @@ export const HelpPage = () => {
         <Typography variant="body1">
           A: In case of a tie, the shift will be assigned based on seniority.
         </Typography>
+      </Box>
+      <Box my={2}>
+        <Typography variant="h5" gutterBottom>
+          Still Need Help?
+        </Typography>
+        <Typography variant="body1">
+          If you can't find the answer you're looking for, feel free to reach
+          out to our scheduling department.
+        </Typography>
+        <Button variant="outlined" color="primary" onClick={handleEmailClick}>
+          Contact Scheduling Department
+        </Button>
       </Box>
     </Box>
   );
