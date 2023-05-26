@@ -5,6 +5,7 @@ import { BackendURL } from "./component/backendURL";
 
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
+import { HelpPage } from "./pages/Help";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
