@@ -28,8 +28,11 @@ const getState = ({ getStore, getActions, setStore }) => {
         try {
           // fetching data from the backend
           const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
+          if (!resp.ok) {
+            throw new Error('HTTP error ' + resp.status);
+          }
           const data = await resp.json();
-          setStore({ message: data.message });
+          setStore({ message: data.message, error: null }); // error is set to null when request is successful
           // returning data to resolve the Promise
           return data;
         } catch (error) {
@@ -61,7 +64,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error('HTTP error ' + response.status);
           }
           const shifts = await response.json();
-          setStore({ shifts });
+          setStore({ shifts, error: null }); // error is set to null when request is successful
           // returning shifts to resolve the Promise
           return shifts;
         } catch (error) {
@@ -84,7 +87,7 @@ const getState = ({ getStore, getActions, setStore }) => {
             throw new Error('HTTP error ' + response.status);
           }
           const bidResponse = await response.json();
-          setStore({ bidResponse });
+          setStore({ bidResponse, error: null }); // error is set to null when request is successful
           // returning bidResponse to resolve the Promise
           return bidResponse;
         } catch (error) {
@@ -98,6 +101,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 };
 
 export default getState;
+
 
 
 
