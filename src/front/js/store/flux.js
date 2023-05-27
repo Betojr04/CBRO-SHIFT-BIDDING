@@ -15,10 +15,11 @@ const getState = ({ getStore, getActions, setStore }) => {
         },
       ],
       shifts: [], // added to store the list of shifts
-      bidResponse: null // added to store the response of submitting a bid
+      bidResponse: null, // added to store the response of submitting a bid
+      error: null, // added to store the error message if there's any error while making a request
     },
     actions: {
-      // Use getActions to call a function within a fuction
+      // Use getActions to call a function within a function
       exampleFunction: () => {
         getActions().changeColor(0, "green");
       },
@@ -29,10 +30,12 @@ const getState = ({ getStore, getActions, setStore }) => {
           const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
           const data = await resp.json();
           setStore({ message: data.message });
-          // don't forget to return something, that is how the async resolves
+          // returning data to resolve the Promise
           return data;
         } catch (error) {
           console.log("Error loading message from backend", error);
+          setStore({ error: error.message }); // set the error message in the store
+          return error;
         }
       },
 
@@ -59,8 +62,12 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const shifts = await response.json();
           setStore({ shifts });
+          // returning shifts to resolve the Promise
+          return shifts;
         } catch (error) {
           console.log('Failed to load shifts:', error);
+          setStore({ error: error.message }); // set the error message in the store
+          return error;
         }
       },
 
@@ -78,8 +85,12 @@ const getState = ({ getStore, getActions, setStore }) => {
           }
           const bidResponse = await response.json();
           setStore({ bidResponse });
+          // returning bidResponse to resolve the Promise
+          return bidResponse;
         } catch (error) {
           console.log('Failed to submit bid:', error);
+          setStore({ error: error.message }); // set the error message in the store
+          return error;
         }
       }
     },
@@ -87,6 +98,7 @@ const getState = ({ getStore, getActions, setStore }) => {
 };
 
 export default getState;
+
 
 
 
