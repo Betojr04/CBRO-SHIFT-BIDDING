@@ -1,7 +1,3 @@
-import AppDispatcher from "./AppDispatcher";
-import ShiftConstants from "./ShiftConstants";
-import { get, post } from "./shiftService";
-
 const getState = ({ getStore, getActions, setStore }) => {
   return {
     store: {
