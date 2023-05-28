@@ -17,7 +17,7 @@ mail_settings = {
 }
 
 api.config.update(mail_settings)
-mail = Mail(app)
+mail = Mail(api)
 
 api = Blueprint('api', __name__)
 
