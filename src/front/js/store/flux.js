@@ -1,4 +1,4 @@
-import { createContext, useState } from 'react';
+import React, { createContext, useState } from 'react';
 
 export const Context = createContext(null);
 
@@ -45,10 +45,10 @@ const injectContext = PassedComponent => {
                         throw new Error('Unable to fetch shifts.');
                     }
                     const shifts = await response.json();
-                    setStore(store => ({ ...store, shifts: shifts, shiftError: null }));
+                    setStore(store => ({ ...store, shifts: shifts }));
                     return true;
                 } catch (error) {
-                    setStore(store => ({ ...store, shiftError: 'Failed to fetch shifts. Please try again.' }));
+                    setStore(store => ({ ...store, shiftError: error.message }));
                     console.error('Error:', error);
                     return false;
                 }
@@ -66,11 +66,11 @@ const injectContext = PassedComponent => {
                     const updatedShift = await response.json();
                     setStore(store => {
                         const shifts = store.shifts.map(shift => shift.id === shiftId ? updatedShift : shift);
-                        return { ...store, shifts: shifts, bidError: null };
+                        return { ...store, shifts: shifts };
                     });
                     return true;
                 } catch (error) {
-                    setStore(store => ({ ...store, bidError: 'Failed to submit bid. Please try again.' }));
+                    setStore(store => ({ ...store, bidError: error.message }));
                     console.error('Error:', error);
                     return false;
                 }
@@ -87,7 +87,6 @@ const injectContext = PassedComponent => {
 };
 
 export default injectContext;
-
 
 
 

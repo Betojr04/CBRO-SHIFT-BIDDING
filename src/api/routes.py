@@ -6,7 +6,7 @@ from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_mail import Mail, Message
 
-app = Flask(__name__)
+api = Flask(__name__)
 mail_settings = {
     "MAIL_SERVER": 'smtp.gmail.com',
     "MAIL_PORT": 465,
@@ -16,7 +16,7 @@ mail_settings = {
     "MAIL_PASSWORD": 'your-password'
 }
 
-app.config.update(mail_settings)
+api.config.update(mail_settings)
 mail = Mail(app)
 
 api = Blueprint('api', __name__)
@@ -31,7 +31,7 @@ def handle_hello():
 
     return jsonify(response_body), 200
 
-@app.route('/send-mail', methods=['POST'])
+@api.route('/send-mail', methods=['POST'])
 def send_mail():
     data = request.get_json()
     msg = Message(subject="Help Request",
