@@ -1,95 +1,87 @@
-import React, { createContext, useState } from 'react';
-
-export const Context = createContext(null);
-
-const injectContext = PassedComponent => {
-    const StoreWrapper = props => {
-        //this will be passed to the components as they consume the context
-        const [store, setStore] = useState({
-            message: null,
-            demo: [
-                { title: "FIRST", background: "white", initial: "white" },
-                { title: "SECOND", background: "white", initial: "white" },
-            ],
-            shifts: [],
-            bidError: null,
-            shiftError: null,
+const getState = ({ getStore, getActions, setStore }) => {
+  return {
+    store: {
+      message: null,
+      demo: [
+        { title: "FIRST", background: "white", initial: "white" },
+        { title: "SECOND", background: "white", initial: "white" },
+      ],
+      shifts: [],
+      bidError: null,
+      shiftError: null,
+    },
+    actions: {
+      exampleFunction: () => {
+        actions.changeColor(0, "green");
+      },
+      getMessage: async () => {
+        try {
+          const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
+          const data = await resp.json();
+          setStore((store) => ({ ...store, message: data.message }));
+          return true;
+        } catch (error) {
+          console.error("Error loading message from backend", error);
+          return false;
+        }
+      },
+      changeColor: (index, color) => {
+        const demo = store.demo.map((elm, i) => {
+          if (i === index) elm.background = color;
+          return elm;
         });
-
-        const actions = {
-            exampleFunction: () => {
-                actions.changeColor(0, "green");
-            },
-            getMessage: async () => {
-                try {
-                    const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
-                    const data = await resp.json();
-                    setStore(store => ({ ...store, message: data.message }));
-                    return true;
-                } catch (error) {
-                    console.error("Error loading message from backend", error);
-                    return false;
-                }
-            },
-            changeColor: (index, color) => {
-                const demo = store.demo.map((elm, i) => {
-                    if (i === index) elm.background = color;
-                    return elm;
-                });
-                setStore(store => ({ ...store, demo: demo }));
-            },
-            fetchShifts: async () => {
-                try {
-                    const response = await fetch("/api/shifts");
-                    if (!response.ok) {
-                        throw new Error('Unable to fetch shifts.');
-                    }
-                    const shifts = await response.json();
-                    setStore(store => ({ ...store, shifts: shifts }));
-                    return true;
-                } catch (error) {
-                    setStore(store => ({ ...store, shiftError: error.message }));
-                    console.error('Error:', error);
-                    return false;
-                }
-            },
-            submitBid: async (shiftId, bid) => {
-                try {
-                    const response = await fetch(`/api/shifts/${shiftId}/bids`, {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ bid }),
-                    });
-                    if (!response.ok) {
-                        throw new Error('Unable to submit bid.');
-                    }
-                    const updatedShift = await response.json();
-                    setStore(store => {
-                        const shifts = store.shifts.map(shift => shift.id === shiftId ? updatedShift : shift);
-                        return { ...store, shifts: shifts };
-                    });
-                    return true;
-                } catch (error) {
-                    setStore(store => ({ ...store, bidError: error.message }));
-                    console.error('Error:', error);
-                    return false;
-                }
-            }
-        };
-
-        return (
-            <Context.Provider value={{ store, actions }}>
-                <PassedComponent {...props} />
-            </Context.Provider>
-        );
-    };
-    return StoreWrapper;
+        setStore((store) => ({ ...store, demo: demo }));
+      },
+      fetchShifts: async () => {
+        try {
+          const response = await fetch("/api/shifts");
+          if (!response.ok) {
+            throw new Error("Unable to fetch shifts.");
+          }
+          const shifts = await response.json();
+          setStore((store) => ({ ...store, shifts: shifts, shiftError: null }));
+          return true;
+        } catch (error) {
+          setStore((store) => ({
+            ...store,
+            shiftError: "Failed to fetch shifts. Please try again.",
+          }));
+          console.error("Error:", error);
+          return false;
+        }
+      },
+      submitBid: async (shiftId, bid) => {
+        try {
+          const response = await fetch(`/api/shifts/${shiftId}/bids`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ bid }),
+          });
+          if (!response.ok) {
+            throw new Error("Unable to submit bid.");
+          }
+          const updatedShift = await response.json();
+          setStore((store) => {
+            const shifts = store.shifts.map((shift) =>
+              shift.id === shiftId ? updatedShift : shift
+            );
+            return { ...store, shifts: shifts, bidError: null };
+          });
+          return true;
+        } catch (error) {
+          setStore((store) => ({
+            ...store,
+            bidError: "Failed to submit bid. Please try again.",
+          }));
+          console.error("Error:", error);
+          return false;
+        }
+      },
+    },
+  };
 };
 
-export default injectContext;
-
-
-
+export default getState;
 
 // const getState = ({ getStore, getActions, setStore }) => {
 //   return {
@@ -194,10 +186,6 @@ export default injectContext;
 // };
 
 // export default getState;
-
-
-
-
 
 // const getState = ({ getStore, getActions, setStore }) => {
 //   return {
