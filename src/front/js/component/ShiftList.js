@@ -19,6 +19,7 @@ const ShiftList = () => {
   }, [store.shifts]);
 
   return (
+    <ErrorBoundary>
     <div>
       <h1>Available Shifts</h1>
       <ul>
@@ -32,6 +33,7 @@ const ShiftList = () => {
         ))}
       </ul>
     </div>
+    </ErrorBoundary>
   );
 }
 
