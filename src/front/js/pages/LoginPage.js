@@ -7,6 +7,7 @@ import {
   Grid,
   Container,
 } from "@material-ui/core";
+import { Link } from "react-router-dom";
 import "../../styles/loginpage.css";
 
 const LoginPage = () => {
@@ -47,6 +48,14 @@ const LoginPage = () => {
               >
                 Log in
               </Button>
+            </Box>
+            <Box mt={2}>
+              <Typography variant="body1">
+                Don't have an account?{" "}
+                <Link to="/signup" style={{ textDecoration: "none" }}>
+                  Sign up
+                </Link>
+              </Typography>
             </Box>
           </Grid>
         </Grid>
