@@ -77,6 +77,22 @@ const getState = ({ getStore, getActions, setStore }) => {
           return false;
         }
       },
+      registerUser: async (userData) => {
+        try {
+          const response = await fetch("/api/register", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(userData),
+          });
+          if (!response.ok) {
+            throw new Error("Failed to register user.");
+          }
+          return true;
+        } catch (error) {
+          console.error("Error:", error);
+          return false;
+        }
+      },
     },
   };
 };
