@@ -1,9 +1,6 @@
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom";
 
 const SignUpPage = () => {
-  const history = useHistory();
-
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -30,7 +27,7 @@ const SignUpPage = () => {
 
     if (success) {
       // Registration successful, redirect to the login page
-      history.push("/login");
+      window.location.href = "/login";
     } else {
       // Registration failed, display an error message
       alert("Failed to register. Please try again.");

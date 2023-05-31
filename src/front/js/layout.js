@@ -8,6 +8,7 @@ import { Demo } from "./pages/demo";
 import { HelpPage } from "./pages/HelpPage";
 import BidForm from "./pages/BidForm";
 import ShiftList from "./component/ShiftList";
+import SignUpPage from "./pages/SignupPage";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
 
@@ -34,6 +35,7 @@ const Layout = () => {
             <Route element={<HelpPage />} path="/helpme" />
             <Route element={<ShiftList />} path="/shiftlist" />
             <Route element={<BidForm />} path="/bidshift" />
+            <Route element={<SignUpPage />} path="/signup" />
             <Route element={<Demo />} path="/demo" />
             <Route element={<Single />} path="/single/:theid" />
             <Route element={<h1>Not found!</h1>} />
