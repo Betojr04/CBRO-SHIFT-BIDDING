@@ -11,6 +11,20 @@ import { Link } from "react-router-dom";
 import "../../styles/loginpage.css";
 
 const LoginPage = () => {
+  const handleLogin = () => {
+    // Perform login logic here
+    // After successful login, redirect to "/bidform"
+    // You can replace the code below with your actual login logic
+    const isLoggedIn = true; // Replace with the result of your login logic
+
+    if (isLoggedIn) {
+      window.location.href = "/bidform";
+    } else {
+      // Handle login error
+      alert("Login failed. Please try again.");
+    }
+  };
+
   return (
     <Container>
       <Box py={10}>
@@ -45,6 +59,7 @@ const LoginPage = () => {
                 color="primary"
                 size="large"
                 fullWidth
+                onClick={handleLogin}
               >
                 Log in
               </Button>

@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 const BidForm = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -13,51 +12,28 @@ const BidForm = () => {
   };
 
   return (
-    <Router>
-      <div>
-        <header>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/protected">Protected Page</Link>
-              </li>
-            </ul>
-          </nav>
-        </header>
+    <div>
+      <header>
+        <nav>
+          <ul>
+            <li>
+              <a href="/">Home</a>
+            </li>
+            <li>
+              <a href="/protected">Protected Page</a>
+            </li>
+          </ul>
+        </nav>
+      </header>
 
-        <Route exact path="/" component={Home} />
+      <Route exact path="/" component={Home} />
 
-        <PrivateRoute
-          path="/protected"
-          component={ProtectedPage}
-          isLoggedIn={isLoggedIn}
-          redirectPath="/login"
-        />
-
-        <Route path="/login">
-          <LoginPage login={login} />
-        </Route>
-      </div>
-    </Router>
-  );
-};
-
-const PrivateRoute = ({
-  component: Component,
-  isLoggedIn,
-  redirectPath,
-  ...rest
-}) => {
-  return (
-    <Route
-      {...rest}
-      render={(props) =>
-        isLoggedIn ? <Component {...props} /> : <Redirect to={redirectPath} />
-      }
-    />
+      {isLoggedIn ? (
+        <Route path="/protected" component={ProtectedPage} />
+      ) : (
+        <Route path="/protected" component={LoginPage} />
+      )}
+    </div>
   );
 };
 
