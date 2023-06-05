@@ -54,7 +54,7 @@ const SignupForm = () => {
       // Perform the registration logic
       // Registration successful, redirect to the login page or show success message
       // Use Link component for navigation
-      return <Link to="/login" />;
+      return <Link to="/" />;
     } else {
       // Registration failed, display an error message
       alert("Failed to register. Please try again.");
@@ -111,7 +111,7 @@ const SignupForm = () => {
           color="primary"
           className={classes.submitButton}
           component={Link}
-          to="/login"
+          to="/"
         >
           Sign Up
         </Button>

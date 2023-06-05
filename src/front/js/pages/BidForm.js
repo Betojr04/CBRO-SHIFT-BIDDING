@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Route } from "react-router-dom";
 
 const BidForm = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -31,7 +32,7 @@ const BidForm = () => {
       {isLoggedIn ? (
         <Route path="/protected" component={ProtectedPage} />
       ) : (
-        <Route path="/protected" component={LoginPage} />
+        <Route path="/protected" render={() => <LoginPage login={login} />} />
       )}
     </div>
   );
