@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 const BidForm = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -27,13 +27,14 @@ const BidForm = () => {
         </nav>
       </header>
 
-      <Route exact path="/" component={Home} />
-
-      {isLoggedIn ? (
-        <Route path="/protected" component={ProtectedPage} />
-      ) : (
-        <Route path="/protected" render={() => <LoginPage login={login} />} />
-      )}
+      <Routes>
+        <Route path="/" element={<Home />} />
+        {isLoggedIn ? (
+          <Route path="/protected" element={<ProtectedPage />} />
+        ) : (
+          <Route path="/protected" element={<LoginPage login={login} />} />
+        )}
+      </Routes>
     </div>
   );
 };
