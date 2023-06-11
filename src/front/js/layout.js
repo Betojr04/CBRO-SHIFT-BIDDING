@@ -6,8 +6,6 @@ import { BackendURL } from "./component/backendURL";
 import { Home } from "./pages/home";
 import { Demo } from "./pages/demo";
 import { HelpPage } from "./pages/HelpPage";
-import BidForm from "./pages/BidForm";
-import ShiftList from "./component/ShiftList";
 import SignUpPage from "./pages/SignupPage";
 import { Single } from "./pages/single";
 import injectContext from "./store/appContext";
@@ -15,6 +13,7 @@ import injectContext from "./store/appContext";
 import { Navbar } from "./component/navbar";
 import { Footer } from "./component/footer";
 import LoginPage from "./pages/LoginPage";
+import ShiftBidForm from "./component/ShiftBidForm";
 
 //create your first component
 const Layout = () => {
@@ -33,8 +32,7 @@ const Layout = () => {
           <Routes>
             <Route element={<LoginPage />} path="/" />
             <Route element={<HelpPage />} path="/helpme" />
-            <Route element={<ShiftList />} path="/shiftlist" />
-            <Route element={<BidForm />} path="/bidform" />
+            <Route element={<ShiftBidForm />} path="/shiftbidform" />
             <Route element={<SignUpPage />} path="/signup" />
             <Route element={<Demo />} path="/demo" />
             <Route element={<Single />} path="/single/:theid" />
