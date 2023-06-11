@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import ShiftList from "../component/ShiftList";
 
-const BidForm = () => {
+const BidForm = (shift) => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const login = () => {
@@ -59,6 +60,7 @@ const ProtectedPage = () => {
   return (
     <div>
       <h1>Welcome to the Protected Page</h1>
+      <ShiftList />
       <form onSubmit={handleBidSubmit}>
         <label>
           Bid Amount:

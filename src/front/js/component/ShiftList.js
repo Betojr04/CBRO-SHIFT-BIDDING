@@ -5,6 +5,7 @@ import BidForm from "../pages/BidForm.js";
 const ShiftList = () => {
   const { store, actions } = useContext(Context);
   const [shifts, setShifts] = useState([]);
+  const [selectedShift, setSelectedShift] = useState(null);
 
   useEffect(() => {
     const fetchShifts = async () => {
@@ -30,9 +31,11 @@ const ShiftList = () => {
               <p>{shift.description}</p>
               <p>Start Time: {shift.startTime}</p>
               <p>End Time: {shift.endTime}</p>
+              <button onClick={() => setSelectedShift(shift)}>Bid</button>
             </li>
           ))}
         </ul>
+        {selectedShift && <BidForm shift={selectedShift} />}
       </div>
     </ErrorBoundary>
   );
