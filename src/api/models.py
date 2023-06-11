@@ -37,6 +37,13 @@ class Shift(db.Model):
     bids = db.relationship('Bid', backref='shift', lazy='dynamic')
     preferences = db.relationship('Preference', backref='shift', lazy='dynamic')
 
+class Bid(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, nullable=False)
+    shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'), nullable=False)
+    bid = db.Column(db.Integer, nullable=False)
+
+
 class Preference(db.Model):
     __tablename__ = 'preferences'
 
@@ -69,13 +76,3 @@ class User(db.Model):
         access_token = create_access_token(identity=self.user_id)
         return access_token
 
-class Shift(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    start_time = db.Column(db.DateTime, nullable=False)
-    end_time = db.Column(db.DateTime, nullable=False)
-
-class Bid(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
-    shift_id = db.Column(db.Integer, db.ForeignKey('shift.id'), nullable=False)
-    bid = db.Column(db.Integer, nullable=False)

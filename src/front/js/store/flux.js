@@ -83,6 +83,55 @@ const getState = ({ getStore, getActions, setStore }) => {
         localStorage.removeItem("accessToken");
         setStore({ isLoggedIn: false, currentUser: null });
       },
+      getShifts: async () => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        try {
+          const response = await fetch("/shifts", {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to get shifts.");
+          }
+
+          const shifts = await response.json();
+          console.log("Shifts loaded successfully: ", shifts);
+          setStore((store) => ({ ...store, shifts: shifts }));
+        } catch (error) {
+          console.error("Failed to load shifts: ", error);
+          setStore((store) => ({ ...store, shiftError: error.toString() }));
+        }
+      },
+      submitBid: async (shiftId, bid) => {
+        const accessToken = localStorage.getItem("accessToken");
+
+        try {
+          const response = await fetch(`/shifts/${shiftId}/bids`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${accessToken}`,
+            },
+            body: JSON.stringify({ bid }),
+          });
+
+          if (!response.ok) {
+            throw new Error("Failed to submit bid.");
+          }
+
+          console.log(
+            `Bid submitted successfully for shift id ${shiftId} with bid value ${bid}`
+          );
+        } catch (error) {
+          console.error("Failed to submit bid: ", error);
+          setStore((store) => ({ ...store, bidError: error.toString() }));
+        }
+      },
     },
   };
 };
