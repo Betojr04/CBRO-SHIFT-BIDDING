@@ -92,21 +92,54 @@ def login():
 @jwt_required()
 def get_shifts():
     shifts = Shift.query.all()
-    return jsonify([shift.to_dict() for shift in shifts]), 200
+    formatted_shifts = []
+    for shift in shifts:
+        formatted_shifts.append({
+            'id': shift.id,
+            'startTime': shift.start_time.isoformat(),
+            'endTime': shift.end_time.isoformat(),
+            'teamLead': shift.team_lead,
+            'manager': shift.manager,
+        })
+    return jsonify(formatted_shifts), 200
 
-
-
-@api.route('/shifts/<int:shift_id>/bids', methods=['POST'])
+@api.route('/preferences', methods=['POST'])
 @jwt_required()
-def submit_bid(shift_id):
-    bid_value = request.json.get('bid')
+def create_preference():
     user_id = get_jwt_identity()
-    
     if not user_id:
         return jsonify(error='Not logged in'), 403
-
-    bid = Bid(user_id=user_id, shift_id=shift_id, bid=bid_value)
-    db.session.add(bid)
+    data = request.get_json()
+    preference = Preference(user_id=user_id, shift_id=data['shiftId'], rank=data['rank'])
+    db.session.add(preference)
     db.session.commit()
-    
     return jsonify(success=True), 200
+
+@api.route('/preferences/<int:preference_id>', methods=['PUT'])
+@jwt_required()
+def update_preference(preference_id):
+    user_id = get_jwt_identity()
+    if not user_id:
+        return jsonify(error='Not logged in'), 403
+    data = request.get_json()
+    preference = Preference.query.filter_by(id=preference_id, user_id=user_id).first()
+    if preference:
+        preference.rank = data['rank']
+        db.session.commit()
+        return jsonify(success=True), 200
+    else:
+        return jsonify(error='Preference not found'), 404
+
+@api.route('/preferences/<int:preference_id>', methods=['DELETE'])
+@jwt_required()
+def delete_preference(preference_id):
+    user_id = get_jwt_identity()
+    if not user_id:
+        return jsonify(error='Not logged in'), 403
+    preference = Preference.query.filter_by(id=preference_id, user_id=user_id).first()
+    if preference:
+        db.session.delete(preference)
+        db.session.commit()
+        return jsonify(success=True), 200
+    else:
+        return jsonify(error='Preference not found'), 404

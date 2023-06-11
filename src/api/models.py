@@ -30,8 +30,12 @@ class Shift(db.Model):
     __tablename__ = 'shifts'
 
     id = db.Column(db.Integer, primary_key=True)
-    shift_time = db.Column(db.String(64), unique=True)
-    users = db.relationship('User', backref='assigned_shift', lazy='dynamic')
+    start_time = db.Column(db.DateTime, nullable=False)
+    end_time = db.Column(db.DateTime, nullable=False)
+    team_lead = db.Column(db.String(64))
+    manager = db.Column(db.String(64))
+    bids = db.relationship('Bid', backref='shift', lazy='dynamic')
+    preferences = db.relationship('Preference', backref='shift', lazy='dynamic')
 
 class Preference(db.Model):
     __tablename__ = 'preferences'
@@ -39,7 +43,6 @@ class Preference(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'))
     user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    rank = db.Column(db.Integer)
 
 class User(db.Model):
     __tablename__ = 'users'
