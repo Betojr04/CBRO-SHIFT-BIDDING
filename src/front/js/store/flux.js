@@ -35,51 +35,6 @@ const getState = ({ getStore, getActions, setStore }) => {
         });
         setStore((store) => ({ ...store, demo: demo }));
       },
-      fetchShifts: async () => {
-        try {
-          const response = await fetch("/api/shifts");
-          if (!response.ok) {
-            throw new Error("Unable to fetch shifts.");
-          }
-          const shifts = await response.json();
-          setStore((store) => ({ ...store, shifts: shifts, shiftError: null }));
-          return true;
-        } catch (error) {
-          setStore((store) => ({
-            ...store,
-            shiftError: "Failed to fetch shifts. Please try again.",
-          }));
-          console.error("Error:", error);
-          return false;
-        }
-      },
-      submitBid: async (shiftId, bid) => {
-        try {
-          const response = await fetch(`/api/shifts/${shiftId}/bids`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ bid }),
-          });
-          if (!response.ok) {
-            throw new Error("Unable to submit bid.");
-          }
-          const updatedShift = await response.json();
-          setStore((store) => {
-            const shifts = store.shifts.map((shift) =>
-              shift.id === shiftId ? updatedShift : shift
-            );
-            return { ...store, shifts: shifts, bidError: null };
-          });
-          return true;
-        } catch (error) {
-          setStore((store) => ({
-            ...store,
-            bidError: "Failed to submit bid. Please try again.",
-          }));
-          console.error("Error:", error);
-          return false;
-        }
-      },
       registerUser: async (userData) => {
         try {
           const response = await fetch("/register", {
