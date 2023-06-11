@@ -10,6 +10,8 @@ const getState = ({ getStore, getActions, setStore }) => {
       shifts: [],
       bidError: null,
       shiftError: null,
+      isLoggedIn: false,
+      currentUser: null,
     },
     actions: {
       exampleFunction: () => {
@@ -121,6 +123,10 @@ const getState = ({ getStore, getActions, setStore }) => {
           console.log("Error logging in user", error);
           throw error;
         }
+      },
+      logoutUser: () => {
+        localStorage.removeItem("accessToken");
+        setStore({ isLoggedIn: false, currentUser: null });
       },
     },
   };

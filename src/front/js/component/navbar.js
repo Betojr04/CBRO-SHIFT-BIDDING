@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 export const Navbar = () => {
@@ -9,10 +9,7 @@ export const Navbar = () => {
           <span className="navbar-brand mb-0 h1">AA CBRO</span>
         </Link>
         <div className="ml-auto">
-          <Link
-            to="helpme
-		  "
-          >
+          <Link to="helpme">
             <button className="btn btn-primary">Need help? Click here.</button>
           </Link>
         </div>

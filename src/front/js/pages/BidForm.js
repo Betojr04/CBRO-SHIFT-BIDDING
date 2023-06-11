@@ -40,7 +40,7 @@ const BidForm = () => {
 };
 
 const Home = () => {
-  return <h1>Welcome to the Home page</h1>;
+  return <h1>Welcome to the authorized user page</h1>;
 };
 
 const ProtectedPage = () => {
