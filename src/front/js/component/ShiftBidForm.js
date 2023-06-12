@@ -2,10 +2,27 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import ShiftSelect from "./ShiftSelect";
 import ChoicesList from "./ChoicesList";
+import { Button, Grid, Paper, Typography } from "@material-ui/core";
+import { makeStyles } from "@material-ui/core/styles";
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    padding: theme.spacing(2),
+  },
+  form: {
+    width: "100%",
+  },
+  button: {
+    marginTop: theme.spacing(2),
+  },
+}));
 
 const ShiftBidForm = ({ shifts, seniority }) => {
   const [selectedShift, setSelectedShift] = useState("");
   const [choices, setChoices] = useState([]);
+
+  const classes = useStyles();
 
   const handleShiftChange = (event) => {
     setSelectedShift(event.target.value);
@@ -28,25 +45,41 @@ const ShiftBidForm = ({ shifts, seniority }) => {
   };
 
   return (
-    <div>
-      <form onSubmit={handleSubmit}>
-        <ShiftSelect
-          shifts={shifts}
-          selectedShift={selectedShift}
-          handleShiftChange={handleShiftChange}
-        />
-        <button type="button" onClick={handleAddChoice}>
-          Add Choice
-        </button>
-        <button type="submit">Submit Bid</button>
-      </form>
-      <ChoicesList choices={choices} shifts={shifts} />
-    </div>
+    <Grid container justify="center">
+      <Grid item xs={12} sm={8} md={6}>
+        <Paper className={classes.root}>
+          <Typography variant="h6">Shift Bid Form</Typography>
+          <form onSubmit={handleSubmit} className={classes.form}>
+            <ShiftSelect
+              shifts={shifts}
+              selectedShift={selectedShift}
+              handleShiftChange={handleShiftChange}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddChoice}
+              className={classes.button}
+            >
+              Add Choice
+            </Button>
+            <Button
+              variant="contained"
+              color="secondary"
+              type="submit"
+              className={classes.button}
+            >
+              Submit Bid
+            </Button>
+          </form>
+          <ChoicesList choices={choices} shifts={shifts} />
+        </Paper>
+      </Grid>
+    </Grid>
   );
 };
 
 ShiftBidForm.propTypes = {
-  shifts: PropTypes.array.isRequired,
   seniority: PropTypes.number.isRequired,
 };
 
