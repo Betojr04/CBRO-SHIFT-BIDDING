@@ -34,16 +34,17 @@ class Preference(db.Model):
 
 
 class User(db.Model):
-
+    __Tablename__ = 'users'
 
     id = db.Column(db.Integer, primary_key=True)
+    email = db.Column(db.String(120), unique=True, nullable=False)
     username = db.Column(db.String(64), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     hire_date = db.Column(db.DateTime)
+    birthday = db.Column(db.DateTime)
+    seniority = db.Column(db.Integer)
+    is_active = db.Column(db.Boolean, default=True)
     assigned_shift_id = db.Column(db.Integer, db.ForeignKey('shift.id'))
-    assigned_shift = db.relationship('Shift', backref='assigned_users')
-
-    # establish a relationship with Preference
     preferences = db.relationship('Preference', backref=db.backref('users', lazy='joined'), lazy='dynamic')
     bids = db.relationship('Bid', backref='users', lazy='dynamic')
 
@@ -61,3 +62,4 @@ class User(db.Model):
     def generate_jwt(self):
         access_token = create_access_token(identity=self.id)
         return access_token
+

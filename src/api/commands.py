@@ -20,14 +20,13 @@ def setup_commands(app):
     @app.cli.command("insert-test-users") # name of our command
     @click.argument("count") # argument of our command
     def insert_test_data(count):
-        from werkzeug.security import generate_password_hash
 
         print("Creating test users")
-        for x in range(1, int(count) + 1): # Need to create user inside loop to create multiple users
+        for x in range(1, int(count) + 1): 
             user = User()
             user.email = 'test_user' + str(x) + "@test.com"
             user.username = 'user' + str(x)
-            user.password = generate_password_hash("default_password")
+            user.password = "default_password"
             
             # For hire_date, subtracting x years + 22 years from current date
             user.hire_date = datetime.now() - timedelta(days=((x+22)*365))
