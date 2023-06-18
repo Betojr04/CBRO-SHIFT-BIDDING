@@ -18,14 +18,16 @@ def setup_commands(app):
     @click.argument("count") # argument of out command
     def insert_test_data(count):
         print("Creating test users")
-        for x in range(1, int(count) + 1):
-            user = User()
-            user.email = "test_user" + str(x) + "@test.com"
-            user.password = "123456"
+        user = User()
+            user.email = fake.unique.email()
+            user.username = 'user' + str(x) # Add this line
+            user.password = generate_password_hash("default_password")
+            user.hire_date = fake.date_between(start_date='-30y', end_date='today')
+            user.seniority = fake.random_int(min=1, max=30)
             user.is_active = True
             db.session.add(user)
             db.session.commit()
-            print("User: ", user.email, " created.")
+            print("User: ", user.email, "Username: ", user.username, " created.") # Update this line
 
         print("All test users created")
 
