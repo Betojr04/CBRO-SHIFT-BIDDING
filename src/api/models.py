@@ -9,25 +9,8 @@ import datetime
 
 db = SQLAlchemy()
 
-# class User(db.Model):
-#     id = db.Column(db.Integer, primary_key=True)
-#     email = db.Column(db.String(120), unique=True, nullable=False)
-#     password = db.Column(db.String(80), unique=False, nullable=False)
-#     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-
-#     def __repr__(self):
-#         return f'<User {self.email}>'
-
-#     def serialize(self):
-#         return {
-#             "id": self.id,
-#             "email": self.email,
-#             # do not serialize the password, its a security breach
-#         }
-
-
 class Shift(db.Model):
-    __tablename__ = 'shifts'
+
 
     id = db.Column(db.Integer, primary_key=True)
     start_time = db.Column(db.DateTime, nullable=False)
@@ -38,28 +21,33 @@ class Shift(db.Model):
     preferences = db.relationship('Preference', backref='shift', lazy='dynamic')
 
 class Bid(db.Model):
+
+
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'), nullable=False)
     bid = db.Column(db.Integer, nullable=False)
 
 
 class Preference(db.Model):
-    __tablename__ = 'preferences'
+
 
     id = db.Column(db.Integer, primary_key=True)
     shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id')) # it should be 'users.id' not 'user.id'
+
 
 class User(db.Model):
-    __tablename__ = 'users'
+
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.String(64), unique=True, index=True)
     password_hash = db.Column(db.String(128))
     hire_date = db.Column(db.DateTime)
-    preferences = db.relationship('Preference', backref='user', lazy='dynamic')
     assigned_shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'))
+
+    # establish a relationship with Preference
+    preferences = db.relationship('Preference', backref=db.backref('users', lazy='joined'), lazy='dynamic')
+    bids = db.relationship('Bid', backref='users', lazy='dynamic')
 
     @property
     def password(self):
@@ -73,6 +61,5 @@ class User(db.Model):
         return check_password_hash(self.password_hash, password)
 
     def generate_jwt(self):
-        access_token = create_access_token(identity=self.user_id)
+        access_token = create_access_token(identity=self.id)
         return access_token
-

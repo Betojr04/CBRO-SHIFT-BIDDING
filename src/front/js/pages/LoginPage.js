@@ -18,7 +18,7 @@ const LoginPage = () => {
     const isLoggedIn = true; // Replace with the result of your login logic
 
     if (isLoggedIn) {
-      window.location.href = "/shiftidform";
+      window.location.href = "/home";
     } else {
       // Handle login error
       alert("Login failed. Please try again.");
