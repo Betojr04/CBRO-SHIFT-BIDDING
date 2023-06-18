@@ -15,6 +15,7 @@ class Shift(db.Model):
     end_time = db.Column(db.DateTime, nullable=False)
     team_lead = db.Column(db.String(64))
     manager = db.Column(db.String(64))
+    users = db.relationship('User', backref=db.backref('shift'), lazy='dynamic')
     bids = db.relationship('Bid', backref='shift', lazy='dynamic',primaryjoin='Shift.id == Bid.shift_id')
 
 class Bid(db.Model):
@@ -29,7 +30,7 @@ class Preference(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     shift_id = db.Column(db.Integer, db.ForeignKey('shift.id'))
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id')) # it should be 'users.id' not 'user.id'
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
 
 class User(db.Model):
@@ -39,7 +40,8 @@ class User(db.Model):
     username = db.Column(db.String(64), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     hire_date = db.Column(db.DateTime)
-    assigned_shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'))
+    assigned_shift_id = db.Column(db.Integer, db.ForeignKey('shift.id'))
+    assigned_shift = db.relationship('Shift', backref='assigned_users')
 
     # establish a relationship with Preference
     preferences = db.relationship('Preference', backref=db.backref('users', lazy='joined'), lazy='dynamic')
