@@ -1,5 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
+import { Select, MenuItem, FormControl, InputLabel } from "@material-ui/core";
 
 const generateShifts = (numTeams, peoplePerTeam) => {
   const shifts = [];
@@ -52,20 +53,26 @@ const ShiftSelect = ({ selectedShift, handleShiftChange }) => {
   const shifts = generateShifts(6, 25);
 
   return (
-    <label>
-      Shift:
-      <select value={selectedShift} onChange={handleShiftChange} required>
-        <option value="">-- Please select a shift --</option>
+    <FormControl fullWidth>
+      <InputLabel id="shift-label">Shift</InputLabel>
+      <Select
+        labelId="shift-label"
+        value={selectedShift}
+        onChange={handleShiftChange}
+      >
+        <MenuItem value="">
+          <em>-- Please select a shift --</em>
+        </MenuItem>
         {shifts.map((shift) => (
-          <option key={shift.id} value={shift.id}>
+          <MenuItem key={shift.id} value={shift.id}>
             {shift.team} ({shift.startTime} - {shift.endTime}, Lead:{" "}
             {shift.lead}, Manager: {shift.manager}, Days Off:{" "}
             {shift.daysOff.join(", ")}, Day Off from Phone Time:{" "}
             {shift.dayOffPhone})
-          </option>
+          </MenuItem>
         ))}
-      </select>
-    </label>
+      </Select>
+    </FormControl>
   );
 };
 

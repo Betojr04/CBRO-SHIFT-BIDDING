@@ -36,6 +36,7 @@ class User(db.Model):
 
 
     id = db.Column(db.Integer, primary_key=True)
+    username = db.Column(db.String(64), unique=True, nullable=False)
     password_hash = db.Column(db.String(128))
     hire_date = db.Column(db.DateTime)
     assigned_shift_id = db.Column(db.Integer, db.ForeignKey('shifts.id'))

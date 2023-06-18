@@ -30,6 +30,8 @@ const ShiftBidForm = ({ shifts, seniority }) => {
 
   const handleAddChoice = (event) => {
     event.preventDefault();
+    console.log("Seniority: ", seniority); // Add this line
+    console.log("Choices: ", choices); // Add this line
     if (choices.length < seniority && selectedShift) {
       setChoices([...choices, selectedShift]);
       setSelectedShift("");
